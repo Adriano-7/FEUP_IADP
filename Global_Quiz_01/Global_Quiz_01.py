@@ -14,24 +14,18 @@ def solve2():
     df4 = df3.set_index('Product line')
     print(df4)
 
-#it's not working
 def solve3():
     df1 = df.groupby(['City', 'Customer type'])['Invoice ID'].count()
     df2 = df1.reset_index()
     df3 = df2.pivot(index='City', columns='Customer type', values='Invoice ID')
     df4 = df3.append(df3.sum().rename('All'))
     df5 = df4.fillna(0).astype(int)
-    df6 = df5.rename_axis(None, axis=1)
-    print(df6)
-
-#it's not working
-def solve4():
-    df1 = df.groupby(['City', 'Customer type'])['Invoice ID'].count()
-    df2 = df1.reset_index()
-    df3 = df2.pivot(index='City', columns='Customer type', values='Invoice ID')
-    df4 = df3.append(df3.sum().rename('All'))
-    df5 = df4.fillna(0).astype(int)
+    df5['All'] = df5['Member'] + df5['Normal']
     print(df5)
+
+def solve4():
+    df2 = df[(((df['Customer type'] == 'Member') & (df['Gender']=='Male')) | ((df['Customer type'] == 'Normal') & (df['Gender']=='Female'))) & (df['Unit price'] > 99)]
+    print(df2.iloc[:, 2:6])
 
 def solve5():
     df1 = df.groupby(['City', 'Product line'])['Total'].sum()
@@ -54,9 +48,8 @@ def solve7():
 def solve8():
     df.drop(df[df['City'] == 'Yangon'].index, inplace=True)
 
-#It's not working, it's returning KeyError: 'Unit_price'
 def solve9():
-    df.insert(9, 'QxPrice', df['Unit_price'] * df['Quantity'])
+    df.insert(7, 'QxPrice', df['Unit price'] * df['Quantity'])
     
 def solve10():
     df1 = df[df['Total'] > 1030]
@@ -87,9 +80,15 @@ def solve15():
     df2.drop(df2.index[1], inplace=True)
     print(df2)
 
-#It's not working
 def solve16():
-    print("")
+    numFemale = len(df[df['Gender']=='Female'])
+    numMale = len(df[df['Gender']=='Male'])
+    total = len(df)
+    percentFemale = numFemale*100.0/total
+    percentMale = numMale*100.0/total
+    print('Female    ', percentFemale)
+    print('Male      ', percentMale)
+    print('Name: Gender, dtype: float64')
     
 
 def solve17():
